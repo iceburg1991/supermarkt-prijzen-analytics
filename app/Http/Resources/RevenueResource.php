@@ -26,6 +26,7 @@ class RevenueResource extends JsonResource
         if ($this->collection->isEmpty()) {
             return [
                 'categories' => [],
+                'weekStarts' => [],
                 'series' => [
                     ['name' => __('revenue.base_revenue'), 'data' => []],
                     ['name' => __('revenue.bonus_revenue'), 'data' => []],
@@ -34,17 +35,20 @@ class RevenueResource extends JsonResource
         }
 
         $categories = [];
+        $weekStarts = [];
         $baseData = [];
         $bonusData = [];
 
         foreach ($this->collection as $record) {
             $categories[] = sprintf('W%02d %d', $record->week_number, $record->year);
+            $weekStarts[] = $record->week_start->format('d-m-Y');
             $baseData[] = (float) $record->base_revenue;
             $bonusData[] = (float) $record->bonus_revenue;
         }
 
         return [
             'categories' => $categories,
+            'weekStarts' => $weekStarts,
             'series' => [
                 ['name' => __('revenue.base_revenue'), 'data' => $baseData],
                 ['name' => __('revenue.bonus_revenue'), 'data' => $bonusData],

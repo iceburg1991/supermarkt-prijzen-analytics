@@ -58,6 +58,7 @@ export default function chartBar(config) {
             const locale = config.locale;
             const decimalSep = locale === 'nl' ? ',' : '.';
             const thousandsSep = locale === 'nl' ? '.' : ',';
+            const weekStarts = data.weekStarts ?? [];
 
             this.chart = Highcharts.chart(this.$refs.chartContainer, {
                 chart: {
@@ -85,11 +86,17 @@ export default function chartBar(config) {
                     useHTML: true,
                     formatter() {
                         const category = this.points[0].key;
+                        const pointIndex = this.points[0].point.index;
+                        const weekStart = weekStarts[pointIndex] ?? '';
                         const parts = category.match(/W(\d+)\s+(\d+)/);
                         const weekNum = parts ? parts[1] : '';
                         const year = parts ? parts[2] : '';
 
-                        let html = `<b>${config.tooltipWeek} ${weekNum} — ${year}</b><br/>`;
+                        let html = `<b>${config.tooltipWeek} ${weekNum} — ${year}</b>`;
+                        if (weekStart) {
+                            html += `<br/><span style="font-size:11px;color:#6b7280">${weekStart}</span>`;
+                        }
+                        html += '<br/>';
 
                         let total = 0;
                         this.points.forEach((point) => {
