@@ -25,8 +25,8 @@ class WeeklyRevenueSeeder extends Seeder
                 ],
                 [
                     'week_start' => $weekStart->format('Y-m-d'),
-                    'base_revenue' => fake()->randomFloat(2, 15000, 45000),
-                    'bonus_revenue' => fake()->randomFloat(2, 500, 5000),
+                    'base_revenue' => fake()->randomFloat(2, 1000000, 3000000),
+                    'bonus_revenue' => fake()->randomFloat(2, 100000, 1500000),
                 ]
             );
         }

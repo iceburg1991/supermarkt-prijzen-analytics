@@ -25,8 +25,8 @@ class WeeklyRevenueFactory extends Factory
             'week_start' => (new \DateTimeImmutable)->setISODate($year, $weekNumber, 1)->format('Y-m-d'),
             'week_number' => $weekNumber,
             'year' => $year,
-            'base_revenue' => fake()->randomFloat(2, 5000, 50000),
-            'bonus_revenue' => fake()->randomFloat(2, 0, 5000),
+            'base_revenue' => fake()->randomFloat(2, 1000000, 3000000),
+            'bonus_revenue' => fake()->randomFloat(2, 100000, 1500000),
         ];
     }
 }
