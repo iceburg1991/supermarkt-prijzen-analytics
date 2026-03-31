@@ -47,4 +47,12 @@ class Product extends Model
     {
         return $this->hasMany(WeeklyRevenueProduct::class);
     }
+
+    /**
+     * Get the price history for this product.
+     */
+    public function productPrices(): HasMany
+    {
+        return $this->hasMany(ProductPrice::class);
+    }
 }
