@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('weekly_revenue_products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('weekly_revenue_id')->constrained('weekly_revenue')->restrictOnDelete();
+            $table->foreignId('weekly_revenue_id')->constrained('weekly_revenues')->restrictOnDelete();
             $table->foreignId('product_id')->constrained()->restrictOnDelete();
             $table->unsignedTinyInteger('week_number');
             $table->unsignedSmallInteger('year');

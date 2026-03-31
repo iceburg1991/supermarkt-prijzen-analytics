@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('weekly_revenue', function (Blueprint $table) {
+        Schema::create('weekly_revenues', function (Blueprint $table) {
             $table->id();
             $table->date('week_start');
             $table->unsignedTinyInteger('week_number');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('weekly_revenue');
+        Schema::dropIfExists('weekly_revenues');
     }
 };
