@@ -18,10 +18,12 @@ class DashboardController extends Controller
     }
 
     /**
-     * Display the chart page.
+     * Display the chart page with locale for Highcharts localization.
      */
     public function chart(): View
     {
-        return view('dashboard.chart');
+        return view('dashboard.chart', [
+            'locale' => app()->getLocale(),
+        ]);
     }
 }
