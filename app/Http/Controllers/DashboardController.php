@@ -12,7 +12,7 @@ class DashboardController extends Controller
      */
     public function index(): View
     {
-        $products = Product::all();
+        $products = Product::orderBy('id')->paginate(25);
 
         return view('dashboard.index', compact('products'));
     }

@@ -12,20 +12,37 @@
     <div class="mx-auto max-w-6xl px-4 py-8">
         <h1 class="mb-6 text-2xl font-semibold text-gray-900">Dashboard</h1>
 
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            @foreach ($products as $product)
-                <div class="rounded-lg bg-white p-4 shadow-sm">
-                    @if ($product->image_url)
-                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="mb-3 h-32 w-full rounded object-contain">
-                    @else
-                        <div class="mb-3 flex h-32 w-full items-center justify-center rounded bg-gray-100 text-sm text-gray-400">
-                            Geen afbeelding
-                        </div>
-                    @endif
-                    <h2 class="font-medium text-gray-900">{{ $product->name }}</h2>
-                    <p class="text-sm text-gray-500">{{ $product->sku }}</p>
-                </div>
-            @endforeach
+        <div class="overflow-hidden rounded-lg bg-white shadow-sm">
+            <table class="w-full text-left text-sm">
+                <thead class="border-b bg-gray-50 text-xs uppercase tracking-wider text-gray-500">
+                    <tr>
+                        <th class="px-6 py-3">Afbeelding</th>
+                        <th class="px-6 py-3">Naam</th>
+                        <th class="px-6 py-3">Retailer</th>
+                        <th class="px-6 py-3">SKU</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    @foreach ($products as $product)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-3">
+                                @if ($product->image_url)
+                                    <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="h-10 w-10 rounded object-contain">
+                                @else
+                                    <div class="flex h-10 w-10 items-center justify-center rounded bg-gray-100 text-xs text-gray-400">—</div>
+                                @endif
+                            </td>
+                            <td class="px-6 py-3 font-medium text-gray-900">{{ $product->name }}</td>
+                            <td class="px-6 py-3 text-gray-500">{{ $product->retailer }}</td>
+                            <td class="px-6 py-3 text-gray-500">{{ $product->sku }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4">
+            {{ $products->links() }}
         </div>
     </div>
 </body>
