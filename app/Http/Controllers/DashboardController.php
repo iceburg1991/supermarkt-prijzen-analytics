@@ -16,4 +16,12 @@ class DashboardController extends Controller
 
         return view('dashboard.index', compact('products'));
     }
+
+    /**
+     * Display the chart page.
+     */
+    public function chart(): View
+    {
+        return view('dashboard.chart');
+    }
 }
