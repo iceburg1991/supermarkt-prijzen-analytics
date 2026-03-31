@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/Users/ijsbrand/Library/Application Support/Herd/bin/php84",
+            "args": [
+                "/Volumes/Development/Workspace/supermarkt-prijs-analytics/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}
