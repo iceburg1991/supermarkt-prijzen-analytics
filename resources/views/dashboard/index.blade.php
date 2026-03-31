@@ -25,7 +25,11 @@
                                 <div class="flex h-10 w-10 items-center justify-center rounded bg-gray-100 text-xs text-gray-400">—</div>
                             @endif
                         </td>
-                        <td class="px-6 py-3 font-medium text-gray-900">{{ $product->name }}</td>
+                        <td class="px-6 py-3 font-medium text-gray-900">
+                            <a href="{{ route('dashboard.show', $product) }}" class="text-[#325ff4] hover:underline">
+                                {{ $product->name }}
+                            </a>
+                        </td>
                         <td class="px-6 py-3 text-gray-500">{{ $product->retailer }}</td>
                         <td class="px-6 py-3 text-gray-500">{{ $product->sku }}</td>
                     </tr>

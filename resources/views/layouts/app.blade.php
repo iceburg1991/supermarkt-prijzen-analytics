@@ -10,19 +10,19 @@
 </head>
 <body class="bg-[#f1f5f9] font-[Inter] antialiased">
     <nav class="bg-white shadow-sm">
-        <div class="mx-auto flex max-w-6xl items-center px-4 py-3">
+        <div class="mx-auto flex max-w-6xl items-center px-4 pt-3">
             <span class="text-lg font-semibold text-[#325ff4]">SupermarketData Inc.</span>
             <div class="ml-6 flex gap-6">
                 <a href="{{ route('dashboard.chart') }}"
-                   class="text-sm font-medium {{ request()->routeIs('dashboard.chart') ? 'text-[#325ff4]' : 'text-gray-500 hover:text-gray-900' }}">
+                   class="border-b-2 pb-3 text-sm font-medium {{ request()->routeIs('dashboard.chart') ? 'border-[#325ff4] text-[#325ff4]' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-900' }}">
                     Grafiek
                 </a>
                 <a href="{{ route('dashboard.index') }}"
-                   class="text-sm font-medium {{ request()->routeIs('dashboard.index') ? 'text-[#325ff4]' : 'text-gray-500 hover:text-gray-900' }}">
+                   class="border-b-2 pb-3 text-sm font-medium {{ request()->routeIs('dashboard.index', 'dashboard.show', 'dashboard.priceTable', 'dashboard.productChart') ? 'border-[#325ff4] text-[#325ff4]' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-900' }}">
                     Producten
                 </a>
             </div>
-            <div class="ml-auto flex items-center gap-1 text-sm">
+            <div class="ml-auto flex items-center gap-1 pb-3 text-sm">
                 <form method="POST" action="{{ route('locale.switch', 'nl') }}" class="inline">
                     @csrf
                     <button type="submit"

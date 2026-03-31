@@ -26,4 +26,28 @@ class DashboardController extends Controller
             'locale' => app()->getLocale(),
         ]);
     }
+
+    /**
+     * Display the product detail page.
+     */
+    public function show(Product $product): View
+    {
+        return view('dashboard.show', compact('product'));
+    }
+
+    /**
+     * Display the product chart page.
+     */
+    public function productChart(Product $product): View
+    {
+        return view('dashboard.product-chart', compact('product'));
+    }
+
+    /**
+     * Display the product price table page.
+     */
+    public function priceTable(Product $product): View
+    {
+        return view('dashboard.price-table', compact('product'));
+    }
 }
