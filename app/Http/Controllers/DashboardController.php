@@ -20,9 +20,10 @@ class DashboardController extends Controller
      */
     public function index(): View
     {
+        $highlightedProducts = Product::orderBy('id')->take(4)->get();
         $products = Product::orderBy('id')->paginate(25);
 
-        return view('dashboard.index', compact('products'));
+        return view('dashboard.index', compact('highlightedProducts', 'products'));
     }
 
     /**
