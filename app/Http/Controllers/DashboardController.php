@@ -57,6 +57,10 @@ class DashboardController extends Controller
      */
     public function priceTable(Product $product): View
     {
-        return view('dashboard.price-table', compact('product'));
+        $prices = $product->productPrices()
+            ->orderByDesc('changed_at')
+            ->paginate(25);
+
+        return view('dashboard.price-table', compact('product', 'prices'));
     }
 }
