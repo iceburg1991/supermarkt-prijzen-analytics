@@ -17,7 +17,7 @@ class PriceController extends Controller
         // - I'm using a select
         // - Limiting the total data set (with the changed_at )
         $prices = $product->productPrices()
-            ->select(['price', 'changed_at'])
+            ->select(['price', 'changed_at', 'is_promotion'])
             ->where('changed_at', '>=', now()->subYears(2)) // max 2 years
             ->orderBy('changed_at')
             ->get();

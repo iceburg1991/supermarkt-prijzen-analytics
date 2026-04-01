@@ -82,16 +82,4 @@
         />
     </div>
 
-    {{-- Price history line chart --}}
-    <div class="mt-6 rounded-lg bg-white p-6 shadow-sm">
-        <h2 class="mb-4 text-lg font-semibold text-gray-900">@lang('product.price_history_title')</h2>
-
-        <x-chart-line
-            :api-url="url('/api/product/' . $product->id . '/prices')"
-            :locale="$locale"
-            :chart-title="''"
-            :series-name="__('product.price')"
-            :y-axis-label="__('product.price') . ' (€)'"
-        />
-    </div>
 @endsection

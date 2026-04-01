@@ -59,7 +59,25 @@ export default function chartLine(config) {
             const decimalSep = locale === 'nl' ? ',' : '.';
             const thousandsSep = locale === 'nl' ? '.' : ',';
             const seriesName = config.seriesName;
+            const promotionLabel = config.promotionLabel || 'Promotie';
             const weekNumbers = data.weekNumbers ?? [];
+            const isPromotion = data.isPromotion ?? [];
+
+            // Build series data with per-point marker colors for promotions
+            const seriesData = (data.series[0]?.data ?? []).map((value, index) => {
+                const point = { y: value };
+
+                if (isPromotion[index]) {
+                    point.marker = {
+                        fillColor: '#16a34a', // green-600 for promotions
+                        radius: 5,
+                        lineWidth: 2,
+                        lineColor: '#16a34a',
+                    };
+                }
+
+                return point;
+            });
 
             this.chart = Highcharts.chart(this.$refs.chartContainer, {
                 chart: {
@@ -93,6 +111,7 @@ export default function chartLine(config) {
                         const date = this.point.category;
                         const value = this.y;
                         const weekNumber = weekNumbers[pointIndex] ?? '';
+                        const promo = isPromotion[pointIndex] ?? false;
 
                         let html = `<b>${date}</b>`;
                         if (weekNumber) {
@@ -100,6 +119,10 @@ export default function chartLine(config) {
                         }
                         html += `<br/><span style="color:${this.point.color}">●</span> `;
                         html += `${seriesName}: <b>€${formatNumber(value, decimalSep, thousandsSep)}</b>`;
+
+                        if (promo) {
+                            html += `<br/><span style="color:#16a34a;font-weight:600">⬤ ${promotionLabel}</span>`;
+                        }
 
                         return html;
                     },
@@ -116,7 +139,7 @@ export default function chartLine(config) {
                 series: [
                     {
                         name: config.seriesName,
-                        data: data.series[0]?.data ?? [],
+                        data: seriesData,
                         color: '#325ff4',
                     },
                 ],

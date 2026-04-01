@@ -6,6 +6,7 @@
         chartTitle: @js($chartTitle),
         seriesName: @js($seriesName),
         yAxisLabel: @js($yAxisLabel),
+        promotionLabel: @js($promotionLabel),
     })"
     x-init="init()"
     x-on:teardown.window="destroy()"

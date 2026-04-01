@@ -35,6 +35,10 @@ class ProductController extends Controller
             ->orderByDesc('changed_at')
             ->paginate(25);
 
-        return view('product.price-table', compact('product', 'prices'));
+        return view('product.price-table', [
+            'product' => $product,
+            'prices' => $prices,
+            'locale' => app()->getLocale(),
+        ]);
     }
 }

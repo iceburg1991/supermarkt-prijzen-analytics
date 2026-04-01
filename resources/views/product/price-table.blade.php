@@ -11,7 +11,21 @@
 
     @include('product.partials.nav', ['product' => $product, 'active' => 'priceTable'])
 
+    {{-- Price history line chart --}}
     <div class="rounded-lg bg-white p-6 shadow-sm">
+        <h2 class="mb-4 text-lg font-semibold text-gray-900">@lang('product.price_history_title')</h2>
+
+        <x-chart-line
+            :api-url="url('/api/product/' . $product->id . '/prices')"
+            :locale="$locale"
+            :chart-title="''"
+            :series-name="__('product.price')"
+            :y-axis-label="__('product.price') . ' (€)'"
+            :promotion-label="__('product.promotion_label')"
+        />
+    </div>
+
+    <div class="mt-6 rounded-lg bg-white p-6 shadow-sm">
         <h1 class="mb-6 text-2xl font-semibold text-gray-900">{{ $product->name }} — @lang('product.price_table_title')</h1>
 
         @if ($prices->isEmpty())

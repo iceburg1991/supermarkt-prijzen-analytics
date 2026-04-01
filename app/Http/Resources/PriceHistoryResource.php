@@ -27,6 +27,7 @@ class PriceHistoryResource extends JsonResource
             return [
                 'categories' => [],
                 'weekNumbers' => [],
+                'isPromotion' => [],
                 'series' => [
                     ['name' => __('product.price'), 'data' => []],
                 ],
@@ -35,17 +36,20 @@ class PriceHistoryResource extends JsonResource
 
         $categories = [];
         $weekNumbers = [];
+        $isPromotion = [];
         $priceData = [];
 
         foreach ($this->collection as $record) {
             $categories[] = $record->changed_at->format('d-m-Y');
             $weekNumbers[] = 'W'.$record->changed_at->format('W').' '.$record->changed_at->format('Y');
+            $isPromotion[] = (bool) $record->is_promotion;
             $priceData[] = (float) $record->price;
         }
 
         return [
             'categories' => $categories,
             'weekNumbers' => $weekNumbers,
+            'isPromotion' => $isPromotion,
             'series' => [
                 ['name' => __('product.price'), 'data' => $priceData],
             ],

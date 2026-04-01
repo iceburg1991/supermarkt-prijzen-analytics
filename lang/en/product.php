@@ -31,5 +31,6 @@ return [
     // Price history chart
     'price' => 'Price',
     'price_history_title' => 'Price History',
+    'promotion_label' => 'Promotion',
 
 ];

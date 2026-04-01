@@ -23,6 +23,7 @@ class ChartLine extends Component
         public string $chartTitle = '',
         public string $seriesName = '',
         public string $yAxisLabel = '',
+        public string $promotionLabel = '',
     ) {}
 
     /**
