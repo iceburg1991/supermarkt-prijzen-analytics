@@ -28,4 +28,8 @@ return [
     'chart_title' => 'Grafiek',
     'chart_placeholder' => 'Productgrafiek wordt hier weergegeven.',
 
+    // Price history chart
+    'price' => 'Prijs',
+    'price_history_title' => 'Prijshistorie',
+
 ];

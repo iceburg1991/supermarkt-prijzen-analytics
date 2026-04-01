@@ -1,8 +1,8 @@
 /**
- * Alpine.js component for the stacked bar revenue chart.
+ * Alpine.js component for the price history line chart.
  *
  * Handles async data fetching, Highcharts initialization,
- * series visibility toggling, and proper chart cleanup.
+ * and proper chart cleanup.
  *
  * Highcharts is dynamically imported on init to avoid loading
  * the library on pages that don't use this component.
@@ -10,7 +10,7 @@
  * @param {object} config - Component configuration from Blade props.
  * @returns {object} Alpine.js component definition.
  */
-export default function chartBar(config) {
+export default function chartLine(config) {
     return {
         chart: null,
         loading: true,
@@ -49,7 +49,7 @@ export default function chartBar(config) {
         },
 
         /**
-         * Render the Highcharts stacked bar chart.
+         * Render the Highcharts line chart.
          *
          * @param {object} Highcharts - The Highcharts module.
          * @param {object} data       - API response with categories and series arrays.
@@ -58,11 +58,12 @@ export default function chartBar(config) {
             const locale = config.locale;
             const decimalSep = locale === 'nl' ? ',' : '.';
             const thousandsSep = locale === 'nl' ? '.' : ',';
-            const weekStarts = data.weekStarts ?? [];
+            const seriesName = config.seriesName;
+            const weekNumbers = data.weekNumbers ?? [];
 
             this.chart = Highcharts.chart(this.$refs.chartContainer, {
                 chart: {
-                    type: 'column',
+                    type: 'line',
                     reflow: true,
                 },
                 title: {
@@ -71,97 +72,58 @@ export default function chartBar(config) {
                 xAxis: {
                     categories: data.categories,
                     crosshair: true,
+                    labels: {
+                        rotation: -45,
+                        style: {
+                            fontSize: '11px',
+                        },
+                    },
                 },
                 yAxis: {
                     min: 0,
                     title: {
                         text: config.yAxisLabel,
                     },
-                    stackLabels: {
-                        enabled: false,
-                    },
                 },
                 tooltip: {
                     shared: true,
                     useHTML: true,
-                    formatter() {
-                        const category = this.points[0].key;
-                        const pointIndex = this.points[0].point.index;
-                        const weekStart = weekStarts[pointIndex] ?? '';
-                        const parts = category.match(/W(\d+)\s+(\d+)/);
-                        const weekNum = parts ? parts[1] : '';
-                        const year = parts ? parts[2] : '';
+                    formatter: function () {
+                        const pointIndex = this.point.index;
+                        const date = this.point.category;
+                        const value = this.y;
+                        const weekNumber = weekNumbers[pointIndex] ?? '';
 
-                        let html = `<b>${weekStart}</b>`;
-                        if (weekNum && year) {
-                            html += `<br/><span style="font-size:11px;color:#6b7280">${config.tooltipWeek} ${weekNum} — ${year}</span>`;
+                        let html = `<b>${date}</b>`;
+                        if (weekNumber) {
+                            html += `<br/><span style="font-size:11px;color:#6b7280">${weekNumber}</span>`;
                         }
-                        html += '<br/>';
-
-                        let total = 0;
-                        this.points.forEach((point) => {
-                            total += point.y;
-                            html += `<span style="color:${point.color}">●</span> `;
-                            html += `${point.series.name}: <b>€${formatNumber(point.y, decimalSep, thousandsSep)}</b><br/>`;
-                        });
-
-                        html += `<br/><b>${config.tooltipTotal}: €${formatNumber(total, decimalSep, thousandsSep)}</b>`;
+                        html += `<br/><span style="color:${this.point.color}">●</span> `;
+                        html += `${seriesName}: <b>€${formatNumber(value, decimalSep, thousandsSep)}</b>`;
 
                         return html;
                     },
                 },
                 plotOptions: {
-                    column: {
-                        stacking: 'normal',
-                        borderWidth: 0,
-                        borderRadius: 2,
+                    line: {
+                        marker: {
+                            enabled: true,
+                            radius: 3,
+                        },
+                        lineWidth: 2,
                     },
                 },
                 series: [
                     {
-                        name: config.baseRevenueName,
+                        name: config.seriesName,
                         data: data.series[0]?.data ?? [],
                         color: '#325ff4',
                     },
-                    {
-                        name: config.bonusRevenueName,
-                        data: data.series[1]?.data ?? [],
-                        color: '#f59e0b',
-                    },
                 ],
                 legend: {
-                    enabled: true,
+                    enabled: false,
                 },
             });
-        },
-
-        /**
-         * Toggle series visibility by filter type.
-         *
-         * @param {'all'|'base'|'bonus'} filter - Which series to show.
-         */
-        applyFilter(filter) {
-            if (!this.chart) return;
-
-            const baseSeries = this.chart.series[0];
-            const bonusSeries = this.chart.series[1];
-
-            switch (filter) {
-                case 'base':
-                    baseSeries.setVisible(true, false);
-                    bonusSeries.setVisible(false, false);
-                    break;
-                case 'bonus':
-                    baseSeries.setVisible(false, false);
-                    bonusSeries.setVisible(true, false);
-                    break;
-                default:
-                    baseSeries.setVisible(true, false);
-                    bonusSeries.setVisible(true, false);
-                    break;
-            }
-
-            this.chart.redraw();
         },
 
         /**

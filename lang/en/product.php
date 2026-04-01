@@ -28,4 +28,8 @@ return [
     'chart_title' => 'Chart',
     'chart_placeholder' => 'Product chart will be displayed here.',
 
+    // Price history chart
+    'price' => 'Price',
+    'price_history_title' => 'Price History',
+
 ];

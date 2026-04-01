@@ -34,6 +34,8 @@ class RevenueService
     {
         $startDate = now()->subWeeks($weeks)->startOfWeek();
 
+        //Important to explain for the POC; big data sets require AGGREGATED data,
+        //so we do NOT use foreach loops or joins
         return WeeklyRevenueProduct::query()
             ->select(['week_start', 'week_number', 'year', 'base_revenue', 'bonus_revenue'])
             ->where('product_id', $product->id)
