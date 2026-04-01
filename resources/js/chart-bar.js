@@ -15,6 +15,9 @@ export default function chartBar(config) {
         chart: null,
         loading: true,
         error: null,
+        perfMeta: null,
+        clearing: false,
+        Highcharts: null,
 
         /**
          * Initialize the chart: dynamically import Highcharts, apply config, fetch data, render.
@@ -28,9 +31,25 @@ export default function chartBar(config) {
                         import('./highcharts-locales.js'),
                     ]);
 
+                this.Highcharts = Highcharts;
                 applyLocale(Highcharts, config.locale);
                 applyHighchartsDefaults(Highcharts);
 
+                await this.loadData();
+            } catch (e) {
+                this.loading = false;
+                this.error = `Failed to load chart data: ${e.message}`;
+            }
+        },
+
+        /**
+         * Fetch data from API and render chart.
+         */
+        async loadData() {
+            this.loading = true;
+            this.error = null;
+
+            try {
                 const response = await fetch(config.apiUrl);
 
                 if (!response.ok) {
@@ -40,12 +59,46 @@ export default function chartBar(config) {
                 const json = await response.json();
                 const data = json.data;
 
+                // Store performance metrics for display (meta is inside data)
+                this.perfMeta = data.meta ?? null;
+
                 this.loading = false;
-                this.renderChart(Highcharts, data);
+                this.renderChart(this.Highcharts, data);
             } catch (e) {
                 this.loading = false;
                 this.error = `Failed to load chart data: ${e.message}`;
             }
+        },
+
+        /**
+         * Clear the server-side cache and reload data.
+         */
+        async clearCacheAndReload() {
+            this.clearing = true;
+
+            try {
+                await fetch('/api/cache/revenue', { method: 'DELETE' });
+                await this.loadData();
+            } catch (e) {
+                this.error = `Failed to clear cache: ${e.message}`;
+            } finally {
+                this.clearing = false;
+            }
+        },
+
+        /**
+         * Get formatted performance label for display.
+         *
+         * @returns {string} Performance label like "⚡ 2.5ms (cached)" or "🔍 45ms (database)"
+         */
+        get perfLabel() {
+            if (!this.perfMeta) return '';
+
+            const icon = this.perfMeta.cache_hit ? '⚡' : '🔍';
+            const source = this.perfMeta.cache_hit ? 'cached' : 'database';
+            const time = this.perfMeta.query_time_ms;
+
+            return `${icon} ${time}ms (${source})`;
         },
 
         /**

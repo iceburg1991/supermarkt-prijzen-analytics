@@ -2,28 +2,30 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Database\Eloquent\Collection;
+use App\Data\RevenueResult;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RevenueResource extends JsonResource
 {
     /**
-     * Create a new resource instance wrapping a Collection.
+     * Create a new resource instance wrapping a RevenueResult.
      */
-    public function __construct(private Collection $collection)
+    public function __construct(private RevenueResult $result)
     {
-        parent::__construct($collection);
+        parent::__construct($result);
     }
 
     /**
-     * Transform the resource into a Highcharts-compatible array.
+     * Transform the resource into a Highcharts-compatible array with performance meta.
      *
-     * @return array{categories: list<string>, series: list<array{name: string, data: list<float>}>}
+     * @return array{categories: list<string>, weekStarts: list<string>, series: list<array{name: string, data: list<float>}>, meta: array{query_time_ms: float, cache_hit: bool, source: string}}
      */
     public function toArray(Request $request): array
     {
-        if ($this->collection->isEmpty()) {
+        $collection = $this->result->data;
+
+        if ($collection->isEmpty()) {
             return [
                 'categories' => [],
                 'weekStarts' => [],
@@ -31,6 +33,7 @@ class RevenueResource extends JsonResource
                     ['name' => __('revenue.base_revenue'), 'data' => []],
                     ['name' => __('revenue.bonus_revenue'), 'data' => []],
                 ],
+                'meta' => $this->buildMeta(),
             ];
         }
 
@@ -39,7 +42,7 @@ class RevenueResource extends JsonResource
         $baseData = [];
         $bonusData = [];
 
-        foreach ($this->collection as $record) {
+        foreach ($collection as $record) {
             $categories[] = sprintf('W%02d %d', $record->week_number, $record->year);
             $weekStarts[] = $record->week_start->format('d-m-Y');
             $baseData[] = (float) $record->base_revenue;
@@ -53,6 +56,21 @@ class RevenueResource extends JsonResource
                 ['name' => __('revenue.base_revenue'), 'data' => $baseData],
                 ['name' => __('revenue.bonus_revenue'), 'data' => $bonusData],
             ],
+            'meta' => $this->buildMeta(),
+        ];
+    }
+
+    /**
+     * Build the performance meta array.
+     *
+     * @return array{query_time_ms: float, cache_hit: bool, source: string}
+     */
+    private function buildMeta(): array
+    {
+        return [
+            'query_time_ms' => $this->result->queryTimeMs,
+            'cache_hit' => $this->result->cacheHit,
+            'source' => $this->result->cacheHit ? 'cache' : 'database',
         ];
     }
 }
