@@ -51,7 +51,9 @@
                                 {{ $product->name }}
                             </a>
                         </td>
-                        <td class="px-6 py-3 text-gray-500">{{ $product->retailer }}</td>
+                        <td class="px-6 py-3">
+                            <x-retailer-badge :retailer="$product->retailer" />
+                        </td>
                         <td class="px-6 py-3 text-gray-500">{{ $product->sku }}</td>
                     </tr>
                 @endforeach

@@ -12,7 +12,7 @@
 <body class="bg-[#f1f5f9] font-[Inter] antialiased">
     <nav class="bg-white shadow-sm">
         <div class="mx-auto flex max-w-6xl items-center px-4 pt-3">
-            <span class="text-lg font-semibold text-[#325ff4]">SupermarketData Inc.</span>
+            <span class="pb-3 text-lg font-semibold text-[#325ff4]">SupermarketData Inc.</span>
             <div class="ml-6 flex gap-6">
                 <a href="{{ route('dashboard.home') }}"
                    class="border-b-2 pb-3 text-sm font-medium {{ request()->routeIs('dashboard.home') ? 'border-[#325ff4] text-[#325ff4]' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-900' }}">
