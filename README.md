@@ -2,6 +2,19 @@
 
 Proof of Concept webapplicatie voor SupermarketData Inc. — een dashboard voor het analyseren van supermarktprijzen en omzetdata met big data capabilities.
 
+## Screenshots
+
+<!-- Voeg je screenshots toe in docs/images/ en uncomment de relevante regels -->
+
+<img src="docs/images/weekly_revenue.png" alt="Dashboard" width="800">
+
+<img src="docs/images/products_overview.png" alt="Producten overzicht" width="800">
+
+<img src="docs/images/weekly_product_revenue.png" alt="Prijshistorie grafiek" width="800">
+
+<img src="docs/images/product_prices.png" alt="Prijshistorie grafiek" width="800">
+
+
 ## Tech Stack
 
 - PHP 8.4 / Laravel 13

@@ -1,0 +1,5 @@
+# This file ensures the images directory is tracked by Git
+# Add your screenshots here, e.g.:
+# - dashboard.png
+# - products.png
+# - price-chart.png
