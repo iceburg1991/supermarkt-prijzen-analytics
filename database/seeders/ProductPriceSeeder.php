@@ -38,17 +38,17 @@ class ProductPriceSeeder extends Seeder
             ) {
                 foreach ($products as $product) {
                     // Start with a random base price between €0.80 and €12.00
-                    $currentPrice = round(mt_rand(80, 1200) / 100, 2);
+                    $currentPrice = round(random_int(80, 1200) / 100, 2);
                     $startDate = $now->copy()->subWeeks($weeks - 1)->startOfWeek();
 
                     for ($w = 0; $w < $weeks; $w++) {
                         $changedAt = $startDate->copy()->addWeeks($w);
-                        $isPromotion = mt_rand(1, 100) <= ($promotionChance * 100);
+                        $isPromotion = random_int(1, 100) <= ($promotionChance * 100);
 
                         // Calculate new price within ±10% of current price
                         $minPrice = round($currentPrice * (1 - $maxDeviation), 2);
                         $maxPrice = round($currentPrice * (1 + $maxDeviation), 2);
-                        $newPrice = round(mt_rand((int) ($minPrice * 100), (int) ($maxPrice * 100)) / 100, 2);
+                        $newPrice = round(random_int((int) ($minPrice * 100), (int) ($maxPrice * 100)) / 100, 2);
 
                         // Ensure price stays above €0.10
                         $newPrice = max(0.10, $newPrice);
