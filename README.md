@@ -1,58 +1,114 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SupermarketData POC
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Proof of Concept webapplicatie voor SupermarketData Inc. — een dashboard voor het analyseren van supermarktprijzen en omzetdata met big data capabilities.
 
-## About Laravel
+## Tech Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.4 / Laravel 13
+- SQLite (default)
+- Tailwind CSS 4
+- Alpine.js
+- Highcharts 12.x
+- Vite 8.x
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Installatie
 
 ```bash
-composer require laravel/boost --dev
+# Clone de repository
+git clone <repository-url>
+cd supermarketdata-poc
 
-php artisan boost:install
+# Installeer PHP dependencies
+composer install
+
+# Installeer Node dependencies
+npm install
+
+# Kopieer environment file
+cp .env.example .env
+
+# Genereer application key
+php artisan key:generate
+
+# Maak database en seed met testdata (~520K records)
+php artisan migrate:fresh --seed
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Development
 
-## Contributing
+```bash
+# Start development server (Laravel + Vite + Queue)
+composer dev
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Of apart:
+php artisan serve      # Laravel server op http://localhost:8000
+npm run dev            # Vite dev server met hot reload
+```
 
-## Code of Conduct
+## Handige Commando's
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+# Database opnieuw seeden (duurt ~1-2 min voor 520K records)
+php artisan migrate:fresh --seed
 
-## Security Vulnerabilities
+# Cache legen
+php artisan cache:clear
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Alle caches legen
+php artisan optimize:clear
 
-## License
+# Tests draaien
+php artisan test
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Code formatting
+./vendor/bin/pint
+```
+
+## Big Data Demo
+
+De POC demonstreert big data handling met:
+
+- **~520.000 weekly_revenue_products records** (10K producten × 52 weken)
+- **Pre-geaggregeerde data** — geen realtime queries over miljoenen transacties
+- **Application-level caching** — query resultaten worden 15 minuten gecached
+- **Performance metrics** — elke chart toont query tijd en cache status
+
+### Cache Demo
+
+Op de Grafiek-pagina en product detail pagina's zie je een performance paneel:
+1. Klik "Cache legen" → data wordt opgehaald uit database (~15-50ms)
+2. Refresh → data komt uit cache (~1-5ms)
+
+## Project Structuur
+
+```
+app/
+├── Http/Controllers/Api/    # API controllers (JSON responses)
+├── Http/Controllers/        # Web controllers (Blade views)
+├── Services/                # Business logic (DDD service layer)
+├── Data/                    # DTOs
+└── Models/                  # Eloquent models
+
+resources/
+├── js/                      # JavaScript modules
+│   ├── chart-bar.js         # Stacked bar chart component
+│   ├── chart-line.js        # Line chart component
+│   ├── highcharts-config.js # Shared Highcharts defaults
+│   └── highcharts-locales.js# NL/EN locale configs
+└── views/
+    ├── components/          # Blade components
+    └── dashboard/           # Dashboard views
+```
+
+## API Endpoints
+
+| Endpoint | Beschrijving |
+|----------|-------------|
+| `GET /api/revenue` | Globale weekly revenue data |
+| `GET /api/revenue/product/{id}` | Product-specifieke revenue data |
+| `GET /api/product/{id}/prices` | Prijsgeschiedenis voor product |
+| `DELETE /api/cache/revenue` | Cache legen (POC demo) |
+
+## Meertaligheid
+
+De applicatie ondersteunt Nederlands (NL) en Engels (EN). Wissel via de knoppen rechtsboven in de navigatie.
