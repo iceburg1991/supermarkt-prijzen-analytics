@@ -8,7 +8,7 @@
     {{-- Highlighted products --}}
     <div class="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
         @foreach ($highlightedProducts as $product)
-            <a href="{{ route('dashboard.show', $product) }}"
+            <a href="{{ route('product.show', $product) }}"
                class="group flex flex-col items-center rounded-lg bg-white p-4 shadow-sm transition-all hover:shadow-md hover:ring-2 hover:ring-[#325ff4]">
                 @if ($product->image_url)
                     <img src="{{ $product->image_url }}"
@@ -47,7 +47,7 @@
                             @endif
                         </td>
                         <td class="px-6 py-3 font-medium text-gray-900">
-                            <a href="{{ route('dashboard.show', $product) }}" class="text-[#325ff4] hover:underline">
+                            <a href="{{ route('product.show', $product) }}" class="text-[#325ff4] hover:underline">
                                 {{ $product->name }}
                             </a>
                         </td>

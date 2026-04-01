@@ -1,30 +1,30 @@
 @extends('layouts.app')
 
-@section('title', $product->name . ' — Prijstabel')
+@section('title', $product->name . ' — ' . __('product.price_table_title'))
 
 @section('content')
     <div class="mb-4 flex items-center justify-between">
         <a href="{{ route('dashboard.index') }}" class="text-sm text-[#325ff4] hover:underline">
-            &larr; Terug naar overzicht
+            &larr; @lang('product.back_to_overview')
         </a>
     </div>
 
-    @include('dashboard.partials.product-nav', ['product' => $product, 'active' => 'priceTable'])
+    @include('product.partials.nav', ['product' => $product, 'active' => 'priceTable'])
 
     <div class="rounded-lg bg-white p-6 shadow-sm">
-        <h1 class="mb-6 text-2xl font-semibold text-gray-900">{{ $product->name }} — Prijstabel</h1>
+        <h1 class="mb-6 text-2xl font-semibold text-gray-900">{{ $product->name }} — @lang('product.price_table_title')</h1>
 
         @if ($prices->isEmpty())
-            <p class="text-gray-500">Geen prijshistorie beschikbaar voor dit product.</p>
+            <p class="text-gray-500">@lang('product.no_price_history')</p>
         @else
             <div class="overflow-hidden rounded-lg border border-gray-200">
                 <table class="w-full text-left text-sm">
                     <thead class="border-b bg-gray-50 text-xs uppercase tracking-wider text-gray-500">
                         <tr>
-                            <th class="px-6 py-3">Datum</th>
-                            <th class="px-6 py-3">Prijs</th>
-                            <th class="px-6 py-3">Oude prijs</th>
-                            <th class="px-6 py-3">Promotie</th>
+                            <th class="px-6 py-3">@lang('product.column_date')</th>
+                            <th class="px-6 py-3">@lang('product.column_price')</th>
+                            <th class="px-6 py-3">@lang('product.column_old_price')</th>
+                            <th class="px-6 py-3">@lang('product.column_promotion')</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -46,10 +46,10 @@
                                 <td class="px-6 py-3">
                                     @if ($price->is_promotion)
                                         <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                                            Ja
+                                            @lang('product.yes')
                                         </span>
                                     @else
-                                        <span class="text-gray-400">Nee</span>
+                                        <span class="text-gray-400">@lang('product.no')</span>
                                     @endif
                                 </td>
                             </tr>

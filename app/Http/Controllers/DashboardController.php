@@ -16,7 +16,7 @@ class DashboardController extends Controller
     }
 
     /**
-     * Display the dashboard overview page.
+     * Display the products overview page.
      */
     public function index(): View
     {
@@ -34,33 +34,5 @@ class DashboardController extends Controller
         return view('dashboard.chart', [
             'locale' => app()->getLocale(),
         ]);
-    }
-
-    /**
-     * Display the product detail page.
-     */
-    public function show(Product $product): View
-    {
-        return view('dashboard.show', compact('product'));
-    }
-
-    /**
-     * Display the product chart page.
-     */
-    public function productChart(Product $product): View
-    {
-        return view('dashboard.product-chart', compact('product'));
-    }
-
-    /**
-     * Display the product price table page.
-     */
-    public function priceTable(Product $product): View
-    {
-        $prices = $product->productPrices()
-            ->orderByDesc('changed_at')
-            ->paginate(25);
-
-        return view('dashboard.price-table', compact('product', 'prices'));
     }
 }

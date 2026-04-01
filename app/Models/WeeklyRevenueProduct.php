@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['weekly_revenue_id', 'product_id', 'week_number', 'year', 'quantity', 'revenue_contribution'])]
+#[Fillable(['weekly_revenue_id', 'product_id', 'week_number', 'year', 'week_start', 'quantity', 'revenue_contribution', 'base_revenue', 'bonus_revenue'])]
 class WeeklyRevenueProduct extends Model
 {
     /** @use HasFactory<WeeklyRevenueProductFactory> */
@@ -38,7 +38,10 @@ class WeeklyRevenueProduct extends Model
     protected function casts(): array
     {
         return [
+            'week_start' => 'date',
             'revenue_contribution' => 'decimal:2',
+            'base_revenue' => 'decimal:2',
+            'bonus_revenue' => 'decimal:2',
         ];
     }
 }
