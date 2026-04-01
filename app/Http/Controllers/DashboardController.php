@@ -8,6 +8,14 @@ use Illuminate\View\View;
 class DashboardController extends Controller
 {
     /**
+     * Display the home page.
+     */
+    public function home(): View
+    {
+        return view('dashboard.home');
+    }
+
+    /**
      * Display the dashboard overview page.
      */
     public function index(): View
