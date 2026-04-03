@@ -43,6 +43,14 @@ class WeeklyRevenue extends Model
     /** @use HasFactory<WeeklyRevenueFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'week_start',
+        'week_number',
+        'year',
+        'base_revenue',
+        'bonus_revenue',
+    ];
+
     /**
      * Get the product details for this weekly revenue.
      */
